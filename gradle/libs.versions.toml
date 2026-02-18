@@ -1,13 +1,15 @@
 [versions]
-kotlinTarget = "2.2"
+kotlinTarget = "2.3"
 javaTarget = "17"
 
-kotlin = "2.2.21"
+kotlin = "2.3.10"
 asm = "9.9.1"
+jetbrainsAnnotations = "26.0.2-1"
 
-xemanticKotlinTest = "1.17.2"
+xemanticKotlinTest = "1.17.3"
+xemanticKotlinJs = "0.1.0"
 
-# TODO put your dependencies here
+marked = "15.0.7"
 
 versionsPlugin = "0.53.0"
 dokkaPlugin = "2.1.0"
@@ -18,7 +20,9 @@ xemanticConventionsPlugin = "0.6.8"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrainsAnnotations" }
 xemantic-kotlin-test = { module = "com.xemantic.kotlin:xemantic-kotlin-test", version.ref = "xemanticKotlinTest" }
+xemantic-kotlin-js = { module = "com.xemantic.kotlin:xemantic-kotlin-js", version.ref = "xemanticKotlinJs" }
 
 [plugins]
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }

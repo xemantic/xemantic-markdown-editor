@@ -14,14 +14,20 @@
  * limitations under the License.
  */
 
-// TODO replace with your package
-package com.xemantic.template.kotlin.multiplatform
+package com.xemantic.markdown.editor
 
-// TODO replace with your code
-public object Foo {
-    public const val BAR: String = "buzz"
-}
+/**
+ * Abstraction for displaying notifications to the user.
+ *
+ * Decouples the ViewModel from browser-specific APIs like `window.alert()`.
+ */
+fun interface Notifier {
 
-public fun main() {
-    print("Hello World!")
+    /**
+     * Displays a notification message to the user.
+     *
+     * @param message The message to display
+     */
+    fun notify(message: String)
+
 }

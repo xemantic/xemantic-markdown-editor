@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-// TODO replace with your package
-package com.xemantic.template.kotlin.multiplatform
+package com.xemantic.markdown.editor
 
-import com.xemantic.kotlin.test.have
-import com.xemantic.kotlin.test.should
-import kotlin.test.Test
-
-// TODO replace with your code
-class HelloWorldTest {
-
-    @Test
-    fun `should have singleton object Foo with const BAR equal to buzz`() {
-        Foo should {
-            have(BAR == "buzz")
-        }
-    }
-
+/**
+ * marked.js module imported as an npm/webpack dependency.
+ */
+@JsModule("marked")
+@JsNonModule
+external object MarkedModule {
+    @JsName("marked")
+    fun marked(markdown: String): String
 }
