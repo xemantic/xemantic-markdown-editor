@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-// TODO replace with your package
-package com.xemantic.template.kotlin.multiplatform
+package com.xemantic.markdown.editor
 
-import com.xemantic.kotlin.test.have
-import com.xemantic.kotlin.test.should
-import kotlin.test.Test
+import com.xemantic.kotlin.js.dom.invoke
+import kotlinx.browser.document
 
-// TODO replace with your code
-class HelloWorldTest {
-
-    @Test
-    fun `should have singleton object Foo with const BAR equal to buzz`() {
-        Foo should {
-            have(BAR == "buzz")
-        }
+/**
+ * Main entry point for the Markdown Editor application.
+ *
+ * Sets up the MVVM architecture by creating the ViewModel and View,
+ * then renders the UI into the document body.
+ */
+fun main() {
+    val viewModel = MarkdownViewModel()
+    val view = markdownEditorView(viewModel)
+    document.body!! {
+        +view
     }
-
 }

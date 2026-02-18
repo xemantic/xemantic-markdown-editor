@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-// TODO replace with your package
-package com.xemantic.template.kotlin.multiplatform
+package com.xemantic.markdown.editor
 
-// TODO replace with your code
-public object Foo {
-    public const val BAR: String = "buzz"
-}
+import com.xemantic.kotlin.test.have
+import kotlin.test.Test
 
-public fun main() {
-    print("Hello World!")
+class MarkdownViewModelTest {
+
+    @Test
+    fun greetingIsHelloWorld() {
+        val viewModel = MarkdownViewModel()
+        have(viewModel.greeting == "Hello World")
+    }
+
 }

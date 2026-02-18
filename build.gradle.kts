@@ -1,8 +1,6 @@
-@file:OptIn(ExperimentalWasmDsl::class, ExperimentalKotlinGradlePluginApi::class)
+@file:OptIn(ExperimentalKotlinGradlePluginApi::class)
 
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jreleaser.model.Active
 
@@ -33,7 +31,6 @@ fun MavenPomDeveloperSpec.projectDevs() {
     }
 }
 
-val javaTarget = libs.versions.javaTarget.get()
 val kotlinTarget = KotlinVersion.fromVersion(libs.versions.kotlinTarget.get())
 
 kotlin {
@@ -43,35 +40,41 @@ kotlin {
         languageVersion = kotlinTarget
         freeCompilerArgs.addAll(
             "-Xcontext-parameters",
-            "-Xcontext-sensitive-resolution"
+            "-Xcontext-sensitive-resolution",
+            "-Xskip-prerelease-check",
+            "-Xexplicit-backing-fields"
         )
         extraWarnings = true
         progressiveMode = true
-        //optIn.addAll("add opt ins here")
-    }
-
-    jvm {
-        // set up according to https://jakewharton.com/gradle-toolchains-are-rarely-a-good-idea/
-        compilerOptions {
-            apiVersion = kotlinTarget
-            languageVersion = kotlinTarget
-            jvmTarget = JvmTarget.fromTarget(javaTarget)
-            freeCompilerArgs.add("-Xjdk-release=$javaTarget")
-            progressiveMode = true
-        }
     }
 
     js {
         browser()
         binaries.executable()
+        useEsModules()
+        compilerOptions {
+            target = "es2015"
+        }
     }
 
     sourceSets {
+
+        commonMain {
+            dependencies {
+                implementation(libs.jetbrains.annotations)
+            }
+        }
 
         commonTest {
             dependencies {
                 implementation(libs.kotlin.test)
                 implementation(libs.xemantic.kotlin.test)
+            }
+        }
+
+        jsMain {
+            dependencies {
+                implementation(libs.xemantic.kotlin.js)
             }
         }
 
