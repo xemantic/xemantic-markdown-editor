@@ -63,7 +63,7 @@ kotlin {
 
     js {
         browser()
-        nodejs()
+        binaries.executable()
     }
 
     sourceSets {
