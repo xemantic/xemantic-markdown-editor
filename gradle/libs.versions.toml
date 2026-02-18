@@ -3,12 +3,15 @@ kotlinTarget = "2.3"
 javaTarget = "17"
 
 kotlin = "2.3.10"
+kotlinxCoroutines = "1.10.2"
 asm = "9.9.1"
 jetbrainsAnnotations = "26.0.2-1"
 
 xemanticKotlinTest = "1.17.3"
 xemanticKotlinJs = "0.1.0"
 markanywhere = "0.1.12"
+
+mokkery = "3.1.1"
 
 versionsPlugin = "0.53.0"
 dokkaPlugin = "2.1.0"
@@ -19,6 +22,7 @@ xemanticConventionsPlugin = "0.6.8"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrainsAnnotations" }
 xemantic-kotlin-test = { module = "com.xemantic.kotlin:xemantic-kotlin-test", version.ref = "xemanticKotlinTest" }
 xemantic-kotlin-js = { module = "com.xemantic.kotlin:xemantic-kotlin-js", version.ref = "xemanticKotlinJs" }
@@ -34,3 +38,4 @@ maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "mavenPubli
 kotlinx-binary-compatibility-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "binaryCompatibilityValidatorPlugin" }
 jreleaser = { id = "org.jreleaser", version.ref = "jreleaserPlugin" }
 xemantic-conventions = { id = "com.xemantic.gradle.xemantic-conventions", version.ref = "xemanticConventionsPlugin" }
+mokkery = { id = "dev.mokkery", version.ref = "mokkery" }

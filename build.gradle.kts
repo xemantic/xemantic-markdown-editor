@@ -13,6 +13,7 @@ plugins {
     alias(libs.plugins.maven.publish)
     alias(libs.plugins.jreleaser)
     alias(libs.plugins.xemantic.conventions)
+    alias(libs.plugins.mokkery)
 }
 
 group = "com.xemantic.markdown.editor"
@@ -68,6 +69,7 @@ kotlin {
         commonTest {
             dependencies {
                 implementation(libs.kotlin.test)
+                implementation(libs.kotlinx.coroutines.test)
                 implementation(libs.xemantic.kotlin.test)
             }
         }

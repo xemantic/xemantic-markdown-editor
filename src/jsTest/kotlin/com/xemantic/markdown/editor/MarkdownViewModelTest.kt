@@ -16,23 +16,83 @@
 
 package com.xemantic.markdown.editor
 
+import com.xemantic.kotlin.test.assert
 import com.xemantic.kotlin.test.have
-import kotlinx.coroutines.Dispatchers
+import com.xemantic.markanywhere.parse.MarkanywhereParser
+import dev.mokkery.mock
+import kotlin.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
+/**
+ * Tests for the [MarkdownViewModel], demonstrating the MVVM pattern.
+ *
+ * Tests live in `jsTest` because [MarkdownViewModel] currently uses JS-only dependencies
+ * ([MarkanywhereParser]). The ViewModel is tested without instantiating the DOM view,
+ * verifying business logic in isolation.
+ *
+ * The [MarkanywhereParser] dependency is mocked with
+ * [Mokkery](https://mokkery.dev/), and coroutines are driven by [UnconfinedTestDispatcher]
+ * so that `launch` blocks execute eagerly within each test, without needing a real event loop.
+ */
+@OptIn(ExperimentalCoroutinesApi::class)
 class MarkdownViewModelTest {
 
     @Test
-    fun initialMarkdownTextContainsWelcomeHeading() {
-        val viewModel = MarkdownViewModel(Dispatchers.Unconfined)
+    fun `should have initial markdown text with welcome heading`() = runTest {
+        // given
+        val dispatcher = UnconfinedTestDispatcher(testScheduler)
+        val parser = mock<MarkanywhereParser>()
+
+        // when
+        val viewModel = MarkdownViewModel(dispatcher, parser)
+
+        // then
         have(viewModel.markdownText.value.contains("# Welcome to Markdown Editor"))
     }
 
     @Test
-    fun onMarkdownChangedUpdatesMarkdownText() {
-        val viewModel = MarkdownViewModel(Dispatchers.Unconfined)
+    fun `should update markdown text when markdown changes`() = runTest {
+        // given
+        val dispatcher = UnconfinedTestDispatcher(testScheduler)
+        val parser = mock<MarkanywhereParser>()
+        val viewModel = MarkdownViewModel(dispatcher, parser)
+
+        // when
         viewModel.onMarkdownChanged("# Hello")
-        have(viewModel.markdownText.value == "# Hello")
+
+        // then
+        assert(viewModel.markdownText.value == "# Hello")
+    }
+
+    @Test
+    fun `should replace markdown text on subsequent changes`() = runTest {
+        // given
+        val dispatcher = UnconfinedTestDispatcher(testScheduler)
+        val parser = mock<MarkanywhereParser>()
+        val viewModel = MarkdownViewModel(dispatcher, parser)
+
+        // when
+        viewModel.onMarkdownChanged("# First")
+        viewModel.onMarkdownChanged("# Second")
+
+        // then
+        assert(viewModel.markdownText.value == "# Second")
+    }
+
+    @Test
+    fun `should allow empty markdown text`() = runTest {
+        // given
+        val dispatcher = UnconfinedTestDispatcher(testScheduler)
+        val parser = mock<MarkanywhereParser>()
+        val viewModel = MarkdownViewModel(dispatcher, parser)
+
+        // when
+        viewModel.onMarkdownChanged("")
+
+        // then
+        assert(viewModel.markdownText.value == "")
     }
 
 }
