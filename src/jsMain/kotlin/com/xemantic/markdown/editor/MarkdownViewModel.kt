@@ -16,7 +16,11 @@
 
 package com.xemantic.markdown.editor
 
+import com.xemantic.markanywhere.parse.DefaultMarkanywhereParser
+import com.xemantic.markanywhere.parse.MarkanywhereParser
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,10 +31,18 @@ import kotlinx.coroutines.flow.asStateFlow
  *
  * Exposes reactive state through [StateFlow]s following the MVVM pattern.
  * The View observes these flows and updates the DOM accordingly.
+ *
+ * @param dispatcher The [CoroutineDispatcher] to use for the coroutine scope.
+ *   Defaults to [Dispatchers.Default]. Pass [kotlinx.coroutines.Dispatchers.Unconfined]
+ *   in tests for synchronous execution without requiring a test dispatcher.
  */
-class MarkdownViewModel {
+class MarkdownViewModel(
+    dispatcher: CoroutineDispatcher = Dispatchers.Default
+) {
 
-    val scope = CoroutineScope(SupervisorJob())
+    val scope = CoroutineScope(SupervisorJob() + dispatcher)
+
+    val parser: MarkanywhereParser = DefaultMarkanywhereParser()
 
     private val _markdownText = MutableStateFlow(
         """# Welcome to Markdown Editor

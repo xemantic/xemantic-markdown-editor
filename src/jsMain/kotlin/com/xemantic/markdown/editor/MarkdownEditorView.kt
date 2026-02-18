@@ -19,11 +19,9 @@ package com.xemantic.markdown.editor
 import com.xemantic.kotlin.js.dom.html.*
 import com.xemantic.kotlin.js.dom.node
 import com.xemantic.markanywhere.js.appendSemanticEvents
-import com.xemantic.markanywhere.parse.DefaultMarkanywhereParser
 import com.xemantic.markanywhere.parse.parse
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 /**
@@ -39,10 +37,10 @@ import kotlinx.coroutines.launch
 fun markdownEditorView(
     viewModel: MarkdownViewModel
 ) = node { div("markdown-editor-app") {
-    val parser = DefaultMarkanywhereParser()
 
     div("editor-pane") {
         textarea("editor-textarea") { textarea ->
+            textarea.placeholder = "Start typing your markdown here..."
             textarea.value = viewModel.markdownText.value
             textarea.oninput = {
                 viewModel.onMarkdownChanged(textarea.value)
@@ -52,12 +50,12 @@ fun markdownEditorView(
 
     div("preview-pane") {
         val previewContent = div("preview-content") {}
-        viewModel.markdownText.onEach { markdown ->
-            previewContent.innerHTML = ""
-            val events = flowOf(markdown).parse(parser)
-            viewModel.scope.launch {
+        viewModel.scope.launch {
+            viewModel.markdownText.collectLatest { markdown ->
+                previewContent.innerHTML = ""
+                val events = flowOf(markdown).parse(viewModel.parser)
                 previewContent.appendSemanticEvents(events)
             }
-        }.launchIn(viewModel.scope)
+        }
     }
 }}
