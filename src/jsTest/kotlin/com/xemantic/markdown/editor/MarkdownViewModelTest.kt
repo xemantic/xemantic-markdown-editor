@@ -17,14 +17,22 @@
 package com.xemantic.markdown.editor
 
 import com.xemantic.kotlin.test.have
+import kotlinx.coroutines.Dispatchers
 import kotlin.test.Test
 
 class MarkdownViewModelTest {
 
     @Test
-    fun greetingIsHelloWorld() {
-        val viewModel = MarkdownViewModel()
-        have(viewModel.greeting == "Hello World")
+    fun initialMarkdownTextContainsWelcomeHeading() {
+        val viewModel = MarkdownViewModel(Dispatchers.Unconfined)
+        have(viewModel.markdownText.value.contains("# Welcome to Markdown Editor"))
+    }
+
+    @Test
+    fun onMarkdownChangedUpdatesMarkdownText() {
+        val viewModel = MarkdownViewModel(Dispatchers.Unconfined)
+        viewModel.onMarkdownChanged("# Hello")
+        have(viewModel.markdownText.value == "# Hello")
     }
 
 }

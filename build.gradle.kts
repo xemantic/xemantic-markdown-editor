@@ -75,6 +75,8 @@ kotlin {
         jsMain {
             dependencies {
                 implementation(libs.xemantic.kotlin.js)
+                implementation(libs.markanywhere.parse)
+                implementation(libs.markanywhere.js)
             }
         }
 

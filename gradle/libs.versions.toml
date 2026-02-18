@@ -8,6 +8,7 @@ jetbrainsAnnotations = "26.0.2-1"
 
 xemanticKotlinTest = "1.17.3"
 xemanticKotlinJs = "0.1.0"
+markanywhere = "0.1.12"
 
 versionsPlugin = "0.53.0"
 dokkaPlugin = "2.1.0"
@@ -21,6 +22,8 @@ kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotl
 jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrainsAnnotations" }
 xemantic-kotlin-test = { module = "com.xemantic.kotlin:xemantic-kotlin-test", version.ref = "xemanticKotlinTest" }
 xemantic-kotlin-js = { module = "com.xemantic.kotlin:xemantic-kotlin-js", version.ref = "xemanticKotlinJs" }
+markanywhere-parse = { module = "com.xemantic.markanywhere:markanywhere-parse", version.ref = "markanywhere" }
+markanywhere-js = { module = "com.xemantic.markanywhere:markanywhere-js", version.ref = "markanywhere" }
 
 [plugins]
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
