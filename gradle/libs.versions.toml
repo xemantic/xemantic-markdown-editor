@@ -9,8 +9,6 @@ jetbrainsAnnotations = "26.0.2-1"
 xemanticKotlinTest = "1.17.3"
 xemanticKotlinJs = "0.1.0"
 
-marked = "15.0.7"
-
 versionsPlugin = "0.53.0"
 dokkaPlugin = "2.1.0"
 mavenPublishPlugin = "0.36.0"

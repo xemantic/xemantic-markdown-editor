@@ -12,16 +12,14 @@ CI runs `./gradlew build` on PRs.
 
 ## Project Overview
 
-A Kotlin/JS browser application for editing and previewing Markdown, compiled to a single JavaScript executable. The application loads via `src/jsMain/resources/index.html` and uses the `marked` npm library for Markdown rendering.
+A Kotlin/JS browser application compiled to a single JavaScript executable. The application loads via `src/jsMain/resources/index.html` and has no npm dependencies.
 
 ## Architecture
 
 MVVM pattern:
 
-- **ViewModel:** `MarkdownViewModel.kt` - manages state through `MutableStateFlow`, implements 300ms debounced rendering, validates content (100k character limit)
-- **View:** `MarkdownEditorView.kt` - constructs DOM using `com.xemantic.kotlin.js.dom` DSL, two-panel layout (editor + preview)
-- **Model/Interop:** `MarkedJs.kt` - external declarations for marked.js npm module
-- **Exports:** `MarkdownExports.kt` - file download utilities
+- **ViewModel:** `MarkdownViewModel.kt` - exposes state as properties
+- **View:** `MarkdownEditorView.kt` - constructs DOM using `com.xemantic.kotlin.js.dom` DSL
 - **Entry Point:** `main.kt`
 
 ## Key Conventions

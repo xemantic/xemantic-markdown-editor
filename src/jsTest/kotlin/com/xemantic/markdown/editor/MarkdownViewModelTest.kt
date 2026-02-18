@@ -16,18 +16,15 @@
 
 package com.xemantic.markdown.editor
 
-/**
- * Abstraction for displaying notifications to the user.
- *
- * Decouples the ViewModel from browser-specific APIs like `window.alert()`.
- */
-fun interface Notifier {
+import com.xemantic.kotlin.test.have
+import kotlin.test.Test
 
-    /**
-     * Displays a notification message to the user.
-     *
-     * @param message The message to display
-     */
-    fun notify(message: String)
+class MarkdownViewModelTest {
+
+    @Test
+    fun greetingIsHelloWorld() {
+        val viewModel = MarkdownViewModel()
+        have(viewModel.greeting == "Hello World")
+    }
 
 }

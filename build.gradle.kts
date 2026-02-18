@@ -75,7 +75,6 @@ kotlin {
         jsMain {
             dependencies {
                 implementation(libs.xemantic.kotlin.js)
-                implementation(npm("marked", libs.versions.marked.get()))
             }
         }
 

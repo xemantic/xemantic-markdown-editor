@@ -18,46 +18,17 @@ package com.xemantic.markdown.editor
 
 import com.xemantic.kotlin.js.dom.invoke
 import kotlinx.browser.document
-import kotlinx.browser.window
-
-/**
- * Default example markdown to show on first load.
- */
-private val DEFAULT_MARKDOWN = """
-# Hello, Markdown!
-
-Welcome to the **Xemantic Markdown Editor**.
-
-## Features
-
-- Live preview
-- Load and save `.md` files
-- Clean, minimal interface
-
-## Example
-
-Write some `code` inline, or a code block:
-
-```
-fun hello() = "Hello, World!"
-```
-
-> Quotes work too!
-""".trimIndent()
 
 /**
  * Main entry point for the Markdown Editor application.
  *
  * Sets up the MVVM architecture by creating the ViewModel and View,
- * then renders the UI.
+ * then renders the UI into the document body.
  */
 fun main() {
-    val viewModel = MarkdownViewModel(
-        notifier = { message -> window.alert(message) }
-    )
+    val viewModel = MarkdownViewModel()
     val view = markdownEditorView(viewModel)
     document.body!! {
         +view
     }
-    viewModel.updateMarkdown(DEFAULT_MARKDOWN)
 }
