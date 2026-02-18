@@ -16,6 +16,12 @@
 
 package com.xemantic.markdown.editor
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+
 /**
  * ViewModel for the markdown editor application.
  *
@@ -24,9 +30,39 @@ package com.xemantic.markdown.editor
  */
 class MarkdownViewModel {
 
-    /**
-     * A greeting message to display in the UI.
-     */
-    val greeting: String = "Hello World"
+    val scope = CoroutineScope(SupervisorJob())
+
+    private val _markdownText = MutableStateFlow(
+        """# Welcome to Markdown Editor
+
+Start typing your markdown here...
+
+## Features
+
+- **Bold** text
+- *Italic* text
+- `inline code`
+
+## Code Block
+
+```kotlin
+fun main() {
+    println("Hello, World!")
+}
+```
+
+> This is a blockquote
+
+---
+
+[Link example](https://example.com)
+""".trimIndent()
+    )
+
+    val markdownText: StateFlow<String> = _markdownText.asStateFlow()
+
+    fun onMarkdownChanged(text: String) {
+        _markdownText.value = text
+    }
 
 }

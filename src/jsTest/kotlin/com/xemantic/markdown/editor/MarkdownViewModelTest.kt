@@ -22,9 +22,16 @@ import kotlin.test.Test
 class MarkdownViewModelTest {
 
     @Test
-    fun greetingIsHelloWorld() {
+    fun initialMarkdownTextContainsWelcomeHeading() {
         val viewModel = MarkdownViewModel()
-        have(viewModel.greeting == "Hello World")
+        have(viewModel.markdownText.value.contains("# Welcome to Markdown Editor"))
+    }
+
+    @Test
+    fun onMarkdownChangedUpdatesMarkdownText() {
+        val viewModel = MarkdownViewModel()
+        viewModel.onMarkdownChanged("# Hello")
+        have(viewModel.markdownText.value == "# Hello")
     }
 
 }
