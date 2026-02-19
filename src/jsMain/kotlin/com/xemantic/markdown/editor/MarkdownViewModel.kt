@@ -16,6 +16,7 @@
 
 package com.xemantic.markdown.editor
 
+import com.xemantic.kotlin.core.text.lineFlow
 import com.xemantic.markanywhere.SemanticEvent
 import com.xemantic.markanywhere.parse.DefaultMarkanywhereParser
 import com.xemantic.markanywhere.parse.MarkanywhereParser
@@ -27,7 +28,6 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.map
 
 /**
@@ -78,7 +78,7 @@ fun main() {
         )
 
     val parsedMarkdown: Flow<Flow<SemanticEvent>> =
-        markdownText.map { markdown -> markdown.lineSequence().asFlow().parse(parser) }
+        markdownText.map { markdown -> markdown.lineFlow().parse(parser) }
 
     fun onMarkdownChanged(text: String) {
         markdownText.value = text
