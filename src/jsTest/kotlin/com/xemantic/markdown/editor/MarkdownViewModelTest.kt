@@ -20,7 +20,6 @@ import com.xemantic.kotlin.test.assert
 import com.xemantic.kotlin.test.have
 import com.xemantic.markanywhere.parse.MarkanywhereParser
 import dev.mokkery.mock
-import kotlin.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -36,7 +35,6 @@ import kotlin.test.Test
  * [Mokkery](https://mokkery.dev/), and coroutines are driven by [UnconfinedTestDispatcher]
  * so that `launch` blocks execute eagerly within each test, without needing a real event loop.
  */
-@OptIn(ExperimentalCoroutinesApi::class)
 class MarkdownViewModelTest {
 
     @Test
