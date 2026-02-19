@@ -16,14 +16,19 @@
 
 package com.xemantic.markdown.editor
 
+import com.xemantic.markanywhere.SemanticEvent
 import com.xemantic.markanywhere.parse.DefaultMarkanywhereParser
 import com.xemantic.markanywhere.parse.MarkanywhereParser
+import com.xemantic.markanywhere.parse.parse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 
 /**
  * ViewModel for the markdown editor application.
@@ -39,7 +44,7 @@ import kotlinx.coroutines.flow.StateFlow
  */
 class MarkdownViewModel(
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
-    val parser: MarkanywhereParser = DefaultMarkanywhereParser()
+    private val parser: MarkanywhereParser = DefaultMarkanywhereParser()
 ) {
 
     val scope = CoroutineScope(SupervisorJob() + dispatcher)
@@ -71,6 +76,9 @@ fun main() {
 [Link example](https://example.com)
 """.trimIndent()
         )
+
+    val parsedMarkdown: Flow<Flow<SemanticEvent>> =
+        markdownText.map { markdown -> flowOf(markdown).parse(parser) }
 
     fun onMarkdownChanged(text: String) {
         markdownText.value = text
