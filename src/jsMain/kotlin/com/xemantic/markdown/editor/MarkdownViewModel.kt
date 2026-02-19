@@ -24,7 +24,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
 /**
  * ViewModel for the markdown editor application.
@@ -33,19 +32,21 @@ import kotlinx.coroutines.flow.asStateFlow
  * The View observes these flows and updates the DOM accordingly.
  *
  * @param dispatcher The [CoroutineDispatcher] to use for the coroutine scope.
- *   Defaults to [Dispatchers.Default]. Pass [kotlinx.coroutines.Dispatchers.Unconfined]
- *   in tests for synchronous execution without requiring a test dispatcher.
+ *   Defaults to [Dispatchers.Default]. Pass [kotlinx.coroutines.test.UnconfinedTestDispatcher]
+ *   in tests for synchronous execution without requiring a real event loop.
+ * @param parser The [MarkanywhereParser] to use for parsing markdown.
+ *   Defaults to [DefaultMarkanywhereParser]. Can be mocked in tests with Mokkery.
  */
 class MarkdownViewModel(
-    dispatcher: CoroutineDispatcher = Dispatchers.Default
+    dispatcher: CoroutineDispatcher = Dispatchers.Default,
+    val parser: MarkanywhereParser = DefaultMarkanywhereParser()
 ) {
 
     val scope = CoroutineScope(SupervisorJob() + dispatcher)
 
-    val parser: MarkanywhereParser = DefaultMarkanywhereParser()
-
-    private val _markdownText = MutableStateFlow(
-        """# Welcome to Markdown Editor
+    val markdownText: StateFlow<String>
+        field = MutableStateFlow(
+            """# Welcome to Markdown Editor
 
 Start typing your markdown here...
 
@@ -69,12 +70,10 @@ fun main() {
 
 [Link example](https://example.com)
 """.trimIndent()
-    )
-
-    val markdownText: StateFlow<String> = _markdownText.asStateFlow()
+        )
 
     fun onMarkdownChanged(text: String) {
-        _markdownText.value = text
+        markdownText.value = text
     }
 
 }
