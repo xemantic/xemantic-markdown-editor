@@ -45,6 +45,7 @@ kotlin {
             "-Xskip-prerelease-check",
             "-Xexplicit-backing-fields"
         )
+        optIn.add("kotlinx.coroutines.ExperimentalCoroutinesApi")
         extraWarnings = true
         progressiveMode = true
     }
