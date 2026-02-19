@@ -27,7 +27,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.map
 
 /**
@@ -78,7 +78,7 @@ fun main() {
         )
 
     val parsedMarkdown: Flow<Flow<SemanticEvent>> =
-        markdownText.map { markdown -> flowOf(markdown).parse(parser) }
+        markdownText.map { markdown -> markdown.lineSequence().asFlow().parse(parser) }
 
     fun onMarkdownChanged(text: String) {
         markdownText.value = text
