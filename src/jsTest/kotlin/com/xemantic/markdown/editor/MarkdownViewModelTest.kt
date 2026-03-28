@@ -121,4 +121,233 @@ class MarkdownViewModelTest {
         assert(eventsFlow.toList() == events)
     }
 
+    @Test
+    fun `should initialize blocks by splitting initial markdown`() = runTest {
+        // given
+        val dispatcher = UnconfinedTestDispatcher(testScheduler)
+        val parser = mock<MarkanywhereParser>()
+
+        // when
+        val viewModel = MarkdownViewModel(dispatcher, parser)
+
+        // then
+        have(viewModel.blocks.value.isNotEmpty())
+        have(viewModel.blocks.value.first().rawText.contains("# Welcome to Markdown Editor"))
+    }
+
+    @Test
+    fun `should update blocks when markdown changes`() = runTest {
+        // given
+        val dispatcher = UnconfinedTestDispatcher(testScheduler)
+        val parser = mock<MarkanywhereParser>()
+        val viewModel = MarkdownViewModel(dispatcher, parser)
+
+        // when
+        viewModel.onMarkdownChanged("# Hello\n\nWorld")
+
+        // then
+        assert(viewModel.blocks.value.size == 2)
+        assert(viewModel.blocks.value[0].rawText == "# Hello")
+        assert(viewModel.blocks.value[1].rawText == "World")
+    }
+
+    @Test
+    fun `should have null focused block index initially`() = runTest {
+        // given
+        val dispatcher = UnconfinedTestDispatcher(testScheduler)
+        val parser = mock<MarkanywhereParser>()
+
+        // when
+        val viewModel = MarkdownViewModel(dispatcher, parser)
+
+        // then
+        assert(viewModel.focusedBlockIndex.value == null)
+    }
+
+    @Test
+    fun `should set focused block index on block focus`() = runTest {
+        // given
+        val dispatcher = UnconfinedTestDispatcher(testScheduler)
+        val parser = mock<MarkanywhereParser>()
+        val viewModel = MarkdownViewModel(dispatcher, parser)
+
+        // when
+        viewModel.onBlockFocused(2)
+
+        // then
+        assert(viewModel.focusedBlockIndex.value == 2)
+    }
+
+    @Test
+    fun `should clear focused block index on block blur`() = runTest {
+        // given
+        val dispatcher = UnconfinedTestDispatcher(testScheduler)
+        val parser = mock<MarkanywhereParser>()
+        val viewModel = MarkdownViewModel(dispatcher, parser)
+        viewModel.onMarkdownChanged("# Hello\n\nWorld")
+        viewModel.onBlockFocused(0)
+
+        // when
+        viewModel.onBlockBlurred(0, "# Hello")
+
+        // then
+        assert(viewModel.focusedBlockIndex.value == null)
+    }
+
+    @Test
+    fun `should update block text on blur`() = runTest {
+        // given
+        val dispatcher = UnconfinedTestDispatcher(testScheduler)
+        val parser = mock<MarkanywhereParser>()
+        val viewModel = MarkdownViewModel(dispatcher, parser)
+        viewModel.onMarkdownChanged("# Hello\n\nWorld")
+        viewModel.onBlockFocused(0)
+
+        // when
+        viewModel.onBlockBlurred(0, "## Modified Heading")
+
+        // then
+        assert(viewModel.blocks.value[0].rawText == "## Modified Heading")
+        assert(viewModel.blocks.value[1].rawText == "World")
+    }
+
+    @Test
+    fun `should update full markdown text on blur`() = runTest {
+        // given
+        val dispatcher = UnconfinedTestDispatcher(testScheduler)
+        val parser = mock<MarkanywhereParser>()
+        val viewModel = MarkdownViewModel(dispatcher, parser)
+        viewModel.onMarkdownChanged("# Hello\n\nWorld")
+        viewModel.onBlockFocused(0)
+
+        // when
+        viewModel.onBlockBlurred(0, "## Changed")
+
+        // then
+        assert(viewModel.markdownText.value == "## Changed\n\nWorld")
+    }
+
+    @Test
+    fun `should split block into multiple blocks when blank line added on blur`() = runTest {
+        // given
+        val dispatcher = UnconfinedTestDispatcher(testScheduler)
+        val parser = mock<MarkanywhereParser>()
+        val viewModel = MarkdownViewModel(dispatcher, parser)
+        viewModel.onMarkdownChanged("# Hello")
+        viewModel.onBlockFocused(0)
+
+        // when - user typed a blank line creating a new paragraph
+        viewModel.onBlockBlurred(0, "# Hello\n\nNew paragraph")
+
+        // then
+        assert(viewModel.blocks.value.size == 2)
+        assert(viewModel.blocks.value[0].rawText == "# Hello")
+        assert(viewModel.blocks.value[1].rawText == "New paragraph")
+    }
+
+}
+
+/**
+ * Tests for the [splitIntoBlocks] and [joinBlocks] utility functions.
+ */
+class BlockSplittingTest {
+
+    @Test
+    fun `splitIntoBlocks should return single empty block for blank input`() {
+        // when
+        val blocks = splitIntoBlocks("")
+
+        // then
+        assert(blocks.size == 1)
+        assert(blocks[0].rawText == "")
+    }
+
+    @Test
+    fun `splitIntoBlocks should return single block for text without blank lines`() {
+        // when
+        val blocks = splitIntoBlocks("# Hello")
+
+        // then
+        assert(blocks.size == 1)
+        assert(blocks[0].rawText == "# Hello")
+    }
+
+    @Test
+    fun `splitIntoBlocks should split on blank lines`() {
+        // when
+        val blocks = splitIntoBlocks("# Hello\n\nWorld")
+
+        // then
+        assert(blocks.size == 2)
+        assert(blocks[0].rawText == "# Hello")
+        assert(blocks[1].rawText == "World")
+    }
+
+    @Test
+    fun `splitIntoBlocks should assign sequential indices`() {
+        // when
+        val blocks = splitIntoBlocks("A\n\nB\n\nC")
+
+        // then
+        assert(blocks[0].index == 0)
+        assert(blocks[1].index == 1)
+        assert(blocks[2].index == 2)
+    }
+
+    @Test
+    fun `splitIntoBlocks should keep code fence as single block`() {
+        // given
+        val markdown = "```kotlin\nfun main() {}\n```"
+
+        // when
+        val blocks = splitIntoBlocks(markdown)
+
+        // then
+        assert(blocks.size == 1)
+        assert(blocks[0].rawText == markdown)
+    }
+
+    @Test
+    fun `splitIntoBlocks should keep code fence with surrounding blank lines as single block`() {
+        // given
+        val markdown = "Before\n\n```kotlin\nfun main() {}\n```\n\nAfter"
+
+        // when
+        val blocks = splitIntoBlocks(markdown)
+
+        // then
+        assert(blocks.size == 3)
+        assert(blocks[0].rawText == "Before")
+        assert(blocks[1].rawText == "```kotlin\nfun main() {}\n```")
+        assert(blocks[2].rawText == "After")
+    }
+
+    @Test
+    fun `joinBlocks round-trips with splitIntoBlocks`() {
+        // given
+        val original = "# Hello\n\nWorld\n\nEnd"
+
+        // when
+        val blocks = splitIntoBlocks(original)
+        val rejoined = joinBlocks(blocks)
+
+        // then
+        assert(rejoined == original)
+    }
+
+    @Test
+    fun `joinBlocks separates blocks with double newline`() {
+        // given
+        val blocks = listOf(
+            MarkdownBlock(0, "First"),
+            MarkdownBlock(1, "Second")
+        )
+
+        // when
+        val result = joinBlocks(blocks)
+
+        // then
+        assert(result == "First\n\nSecond")
+    }
+
 }
