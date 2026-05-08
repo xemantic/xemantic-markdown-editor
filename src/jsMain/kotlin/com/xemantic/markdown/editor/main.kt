@@ -27,8 +27,7 @@ import kotlinx.browser.document
  */
 fun main() {
     val viewModel = MarkdownViewModel()
-    val view = markdownEditorView(viewModel)
     document.body!! {
-        +view
+        markdownEditorView(viewModel)
     }
 }

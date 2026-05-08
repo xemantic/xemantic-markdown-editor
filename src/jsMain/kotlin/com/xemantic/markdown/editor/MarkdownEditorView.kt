@@ -16,11 +16,13 @@
 
 package com.xemantic.markdown.editor
 
+import com.xemantic.kotlin.js.dom.NodeBuilder
+import com.xemantic.kotlin.js.dom.event.onInput
 import com.xemantic.kotlin.js.dom.html.*
-import com.xemantic.kotlin.js.dom.node
 import com.xemantic.markanywhere.js.appendSemanticEvents
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.dom.clear
 
 /**
  * Creates the markdown editor view.
@@ -32,28 +34,31 @@ import kotlinx.coroutines.launch
  * @param viewModel The view model providing state to display
  * @return The root DOM node
  */
-fun markdownEditorView(
+fun NodeBuilder<*>.markdownEditorView(
     viewModel: MarkdownViewModel
-) = node { div("markdown-editor-app") {
+) = div("markdown-editor-app") {
 
     div("editor-pane") {
-        textarea("editor-textarea") { textarea ->
-            textarea.placeholder = "Start typing your markdown here..."
-            textarea.value = viewModel.markdownText.value
-            textarea.oninput = {
-                viewModel.onMarkdownChanged(textarea.value)
+        textarea(
+            "editor-textarea",
+            placeholder = "Start typing your markdown here..."
+        ) {
+            node.value = viewModel.markdownText.value
+            onInput {
+                viewModel.onMarkdownChanged(node.value)
             }
         }
     }
 
     div("preview-pane") {
-        div("preview-content") { previewContent ->
+        div("preview-content") {
             viewModel.scope.launch {
                 viewModel.parsedMarkdown.collectLatest { events ->
-                    previewContent.innerHTML = ""
-                    previewContent.appendSemanticEvents(events)
+                    node.clear()
+                    node.appendSemanticEvents(events)
                 }
             }
         }
     }
-}}
+
+}

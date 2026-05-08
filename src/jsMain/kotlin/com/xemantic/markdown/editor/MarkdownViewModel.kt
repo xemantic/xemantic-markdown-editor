@@ -18,7 +18,6 @@ package com.xemantic.markdown.editor
 
 import com.xemantic.markanywhere.SemanticEvent
 import com.xemantic.markanywhere.parse.DefaultMarkanywhereParser
-import com.xemantic.markanywhere.parse.MarkanywhereParser
 import com.xemantic.markanywhere.parse.parse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -39,12 +38,10 @@ import kotlinx.coroutines.flow.map
  * @param dispatcher The [CoroutineDispatcher] to use for the coroutine scope.
  *   Defaults to [Dispatchers.Default]. Pass [kotlinx.coroutines.test.UnconfinedTestDispatcher]
  *   in tests for synchronous execution without requiring a real event loop.
- * @param parser The [MarkanywhereParser] to use for parsing markdown.
  *   Defaults to [DefaultMarkanywhereParser]. Can be mocked in tests with Mokkery.
  */
 class MarkdownViewModel(
-    dispatcher: CoroutineDispatcher = Dispatchers.Default,
-    private val parser: MarkanywhereParser = DefaultMarkanywhereParser()
+    dispatcher: CoroutineDispatcher = Dispatchers.Default
 ) {
 
     val scope = CoroutineScope(SupervisorJob() + dispatcher)
@@ -78,7 +75,7 @@ fun main() {
         )
 
     val parsedMarkdown: Flow<Flow<SemanticEvent>> =
-        markdownText.map { markdown -> flowOf(markdown).parse(parser) }
+        markdownText.map { markdown -> flowOf(markdown).parse() }
 
     fun onMarkdownChanged(text: String) {
         markdownText.value = text
