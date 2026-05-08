@@ -16,6 +16,12 @@
 
 package com.xemantic.markdown.editor
 
+import com.xemantic.kotlin.js.dom.html.a
+import com.xemantic.kotlin.js.dom.html.footer
+import com.xemantic.kotlin.js.dom.html.h6
+import com.xemantic.kotlin.js.dom.html.header
+import com.xemantic.kotlin.js.dom.html.main
+import com.xemantic.kotlin.js.dom.html.nav
 import com.xemantic.kotlin.js.dom.invoke
 import kotlinx.browser.document
 
@@ -28,6 +34,23 @@ import kotlinx.browser.document
 fun main() {
     val viewModel = MarkdownViewModel()
     document.body!! {
-        markdownEditorView(viewModel)
+        header("surface-container fixed") {
+            nav("center-align") {
+                h6 {
+                    +"xemantic-markdown-editor"
+                }
+            }
+        }
+        main("responsive") {
+            markdownEditorView(viewModel)
+        }
+        footer("surface-container fixed") {
+            nav("center-align") {
+                +"GitHub: "
+                a(href = "https://github.com/xemantic/xemantic-markdown-editor") {
+                    +"https://github.com/xemantic/xemantic-markdown-editor"
+                }
+            }
+        }
     }
 }

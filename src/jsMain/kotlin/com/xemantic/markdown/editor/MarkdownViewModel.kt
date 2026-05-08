@@ -47,32 +47,7 @@ class MarkdownViewModel(
     val scope = CoroutineScope(SupervisorJob() + dispatcher)
 
     val markdownText: StateFlow<String>
-        field = MutableStateFlow(
-            """# Welcome to Markdown Editor
-
-Start typing your markdown here...
-
-## Features
-
-- **Bold** text
-- *Italic* text
-- `inline code`
-
-## Code Block
-
-```kotlin
-fun main() {
-    println("Hello, World!")
-}
-```
-
-> This is a blockquote
-
----
-
-[Link example](https://example.com)
-""".trimIndent()
-        )
+        field = MutableStateFlow(MARKDOWN_EXAMPLE)
 
     val parsedMarkdown: Flow<Flow<SemanticEvent>> =
         markdownText.map { markdown -> flowOf(markdown).parse() }

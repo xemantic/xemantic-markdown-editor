@@ -19,13 +19,7 @@ package com.xemantic.markdown.editor
 import com.xemantic.kotlin.test.assert
 import com.xemantic.kotlin.test.have
 import com.xemantic.markanywhere.SemanticEvent
-import com.xemantic.markanywhere.parse.MarkanywhereParser
-import dev.mokkery.answering.returns
-import dev.mokkery.every
-import dev.mokkery.matcher.any
-import dev.mokkery.mock
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -45,24 +39,22 @@ import kotlin.test.Test
 class MarkdownViewModelTest {
 
     @Test
-    fun `should have initial markdown text with welcome heading`() = runTest {
+    fun `should have initial markdown text from sample`() = runTest {
         // given
         val dispatcher = UnconfinedTestDispatcher(testScheduler)
-        val parser = mock<MarkanywhereParser>()
 
         // when
-        val viewModel = MarkdownViewModel(dispatcher, parser)
+        val viewModel = MarkdownViewModel(dispatcher)
 
         // then
-        have(viewModel.markdownText.value.contains("# Welcome to Markdown Editor"))
+        have(viewModel.markdownText.value == MARKDOWN_EXAMPLE)
     }
 
     @Test
     fun `should update markdown text when markdown changes`() = runTest {
         // given
         val dispatcher = UnconfinedTestDispatcher(testScheduler)
-        val parser = mock<MarkanywhereParser>()
-        val viewModel = MarkdownViewModel(dispatcher, parser)
+        val viewModel = MarkdownViewModel(dispatcher)
 
         // when
         viewModel.onMarkdownChanged("# Hello")
@@ -75,8 +67,7 @@ class MarkdownViewModelTest {
     fun `should replace markdown text on subsequent changes`() = runTest {
         // given
         val dispatcher = UnconfinedTestDispatcher(testScheduler)
-        val parser = mock<MarkanywhereParser>()
-        val viewModel = MarkdownViewModel(dispatcher, parser)
+        val viewModel = MarkdownViewModel(dispatcher)
 
         // when
         viewModel.onMarkdownChanged("# First")
@@ -90,8 +81,7 @@ class MarkdownViewModelTest {
     fun `should allow empty markdown text`() = runTest {
         // given
         val dispatcher = UnconfinedTestDispatcher(testScheduler)
-        val parser = mock<MarkanywhereParser>()
-        val viewModel = MarkdownViewModel(dispatcher, parser)
+        val viewModel = MarkdownViewModel(dispatcher)
 
         // when
         viewModel.onMarkdownChanged("")
@@ -104,14 +94,12 @@ class MarkdownViewModelTest {
     fun `should expose parsed markdown as flow of semantic events`() = runTest {
         // given
         val dispatcher = UnconfinedTestDispatcher(testScheduler)
-        val parser = mock<MarkanywhereParser>()
-        val events = listOf<SemanticEvent>(
+        val events = listOf(
             SemanticEvent.Mark("h1"),
             SemanticEvent.Text("Hello"),
             SemanticEvent.Unmark("h1")
         )
-        every { parser.parse(any()) } returns flowOf(*events.toTypedArray())
-        val viewModel = MarkdownViewModel(dispatcher, parser)
+        val viewModel = MarkdownViewModel(dispatcher)
 
         // when
         viewModel.onMarkdownChanged("# Hello")

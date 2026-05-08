@@ -36,29 +36,34 @@ import kotlinx.dom.clear
  */
 fun NodeBuilder<*>.markdownEditorView(
     viewModel: MarkdownViewModel
-) = div("markdown-editor-app") {
+) {
 
-    div("editor-pane") {
-        textarea(
-            "editor-textarea",
-            placeholder = "Start typing your markdown here..."
-        ) {
-            node.value = viewModel.markdownText.value
-            onInput {
-                viewModel.onMarkdownChanged(node.value)
-            }
-        }
-    }
+    div("grid") {
 
-    div("preview-pane") {
-        div("preview-content") {
-            viewModel.scope.launch {
-                viewModel.parsedMarkdown.collectLatest { events ->
-                    node.clear()
-                    node.appendSemanticEvents(events)
+        section("s6 small-padding") {
+            textarea(
+                "x-editor surface-container small-padding",
+                name = "Markdown Editor",
+                placeholder = "Start typing your markdown here..."
+            ) {
+                node.value = viewModel.markdownText.value
+                onInput {
+                    viewModel.onMarkdownChanged(node.value)
                 }
             }
         }
+
+        section("s6") {
+            div("small-padding scroll") {
+                viewModel.scope.launch {
+                    viewModel.parsedMarkdown.collectLatest { events ->
+                        node.clear()
+                        node.appendSemanticEvents(events)
+                    }
+                }
+            }
+        }
+
     }
 
 }
