@@ -19,6 +19,10 @@ A Kotlin JS markdown editor
 [<img alt="discord users online" src="https://img.shields.io/discord/811561179280965673">](https://discord.gg/vQktqqN2Vn)
 [![Bluesky](https://img.shields.io/badge/Bluesky-0285FF?logo=bluesky&logoColor=fff)](https://bsky.app/profile/xemantic.com)
 
+## Demo
+
+https://xemantic.github.io/xemantic-markdown-editor/
+
 ## Why?
 
 A Markdown editor, built with Kotlin JS, testing capabilities of the [markanywhere](https://github.com/xemantic/markanywhere) library.
