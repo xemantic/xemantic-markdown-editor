@@ -34,12 +34,6 @@ A deliberately gnarly document that exercises CommonMark, GFM, and several
 common extensions. If your parser survives this without screaming, it's
 probably in decent shape.
 
-Setext H1
-=========
-
-Setext H2
----------
-
 ## Heading 2 with `inline code` and *emphasis*
 ### Heading 3 — em-dash, en–dash, ellipsis…
 #### Heading 4 with [a link](https://example.com "Title in quotes")

@@ -54,7 +54,7 @@ fun NodeBuilder<*>.markdownEditorView(
         }
 
         section("s6") {
-            div("small-padding scroll") {
+            div("x-preview small-padding scroll") {
                 viewModel.scope.launch {
                     viewModel.parsedMarkdown.collectLatest { events ->
                         node.clear()

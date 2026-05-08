@@ -21,7 +21,9 @@ A Kotlin JS markdown editor
 
 ## Why?
 
-A markdown editor built with Kotlin JS, following MVVM architecture for clean separation of concerns and testability.
+A Markdown editor, built with Kotlin JS, testing capabilities of the [markanywhere](https://github.com/xemantic/markanywhere) library.
+
+It is following MVVM architecture for clean separation of concerns and testability using [xemantic-kotlin-js](https://github.com/xemantic/xemantic-kotlin-js) library.
 
 ## Usage
 
