@@ -9,7 +9,7 @@ jetbrainsAnnotations = "26.1.0"
 
 xemanticKotlinTest = "1.17.5"
 xemanticKotlinJs = "0.5.0"
-markanywhere = "0.2.0"
+markanywhere = "0.2.1"
 
 mokkery = "3.3.0"
 
