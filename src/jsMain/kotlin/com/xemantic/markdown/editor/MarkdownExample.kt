@@ -19,7 +19,7 @@ package com.xemantic.markdown.editor
 import org.intellij.lang.annotations.Language
 
 @Language("markdown")
-const val MARKDOWN_EXAMPLE = """
+val MARKDOWN_EXAMPLE = $$$"""
 ---
 title: "Parser Stress Test"
 author: "Anonymous"
@@ -183,7 +183,7 @@ without the leading marker.
 > And a code fence:
 >
 > ```js
-> const greet = (name) => `hello, ${'$'}{name}`;
+> const greet = (name) => `hello, ${name}`;
 > ```
 
 ---
@@ -309,10 +309,10 @@ Footnote reference[^short] and another[^long-name-with-dashes].
 
 ## Images
 
-Inline: ![alt text](https://cataas.com/cat "title").
+Inline: ![alt text](https://example.com/img.png "title").
 Reference: ![alt][img-ref].
-Empty alt: ![](https://cataas.com/cat).
-Image inside a link: [![alt](https://cataas.com/cat)](https://example.com).
+Empty alt: ![](https://example.com/decorative.png).
+Image inside a link: [![alt](https://example.com/thumb.png)](https://example.com).
 
 [img-ref]: https://example.com/ref.png "ref title"
 
@@ -368,7 +368,7 @@ Compound term *with formatting*
 
 ## Math (extension)
 
-Inline: ${'$'}E = mc^2$ and $\int_0^\infty e^{-x^2}\,dx = \tfrac{\sqrt{\pi}}{2}$.
+Inline: $E = mc^2$ and $\int_0^\infty e^{-x^2}\,dx = \tfrac{\sqrt{\pi}}{2}$.
 
 Block:
 
@@ -492,4 +492,4 @@ A paragraph immediately followed by a heading
 
 ```
 unclosed fence... what happens at EOF?
-"""
+""".trimIndent()

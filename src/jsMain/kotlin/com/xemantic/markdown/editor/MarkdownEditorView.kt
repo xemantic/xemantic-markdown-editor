@@ -19,8 +19,11 @@ package com.xemantic.markdown.editor
 import com.xemantic.kotlin.js.dom.NodeBuilder
 import com.xemantic.kotlin.js.dom.event.onInput
 import com.xemantic.kotlin.js.dom.html.*
+import com.xemantic.markanywhere.SemanticEvent
 import com.xemantic.markanywhere.js.appendSemanticEvents
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.dom.clear
 
@@ -58,7 +61,11 @@ fun NodeBuilder<*>.markdownEditorView(
                 viewModel.scope.launch {
                     viewModel.parsedMarkdown.collectLatest { events ->
                         node.clear()
-                        node.appendSemanticEvents(events)
+                        node.appendSemanticEvents(
+                            events
+                                .addTableStripes()
+                                .renderMath()
+                        )
                     }
                 }
             }
@@ -66,4 +73,20 @@ fun NodeBuilder<*>.markdownEditorView(
 
     }
 
+}
+
+private fun Flow<SemanticEvent>.addTableStripes() = map {
+    if (it is Mark && it.name == "table") {
+        it.addClass("stripes")
+    } else {
+        it
+    }
+}
+
+private fun SemanticEvent.Mark.addClass(
+    className: String
+): SemanticEvent.Mark {
+    val existingClass = attributes?.get("class")
+    val newClass = if (existingClass != null) "$existingClass $className" else className
+    return copy(attributes = (attributes ?: emptyMap()) + ("class" to newClass))
 }

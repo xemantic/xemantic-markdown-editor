@@ -80,6 +80,7 @@ kotlin {
                 implementation(libs.xemantic.kotlin.js)
                 implementation(libs.markanywhere.parse)
                 implementation(libs.markanywhere.js)
+                implementation(npm("temml", libs.versions.temml.get()))
             }
         }
 
