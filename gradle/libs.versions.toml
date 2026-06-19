@@ -1,18 +1,18 @@
 [versions]
-kotlinTarget = "2.3"
+kotlinTarget = "2.4"
 javaTarget = "17"
 
-kotlin = "2.3.21"
-kotlinxCoroutines = "1.10.2"
+kotlin = "2.4.0"
+kotlinxCoroutines = "1.11.0"
 asm = "9.9.1"
 jetbrainsAnnotations = "26.1.0"
 
 xemanticKotlinTest = "1.17.5"
 xemanticKotlinJs = "0.5.0"
-markanywhere = "0.2.3"
+markanywhere = "0.3.0"
 temml = "0.13.2"
 
-mokkery = "3.3.0"
+mokkery = "3.4.1"
 
 versionsPlugin = "0.54.0"
 dokkaPlugin = "2.2.0"
