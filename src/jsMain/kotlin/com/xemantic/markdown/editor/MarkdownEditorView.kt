@@ -20,6 +20,7 @@ import com.xemantic.kotlin.js.dom.NodeBuilder
 import com.xemantic.kotlin.js.dom.event.onInput
 import com.xemantic.kotlin.js.dom.html.*
 import com.xemantic.markanywhere.SemanticEvent
+import com.xemantic.markanywhere.classList
 import com.xemantic.markanywhere.js.appendSemanticEvents
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
@@ -86,7 +87,6 @@ private fun Flow<SemanticEvent>.addTableStripes() = map {
 private fun SemanticEvent.Mark.addClass(
     className: String
 ): SemanticEvent.Mark {
-    val existingClass = attributes?.get("class")
-    val newClass = if (existingClass != null) "$existingClass $className" else className
-    return copy(attributes = (attributes ?: emptyMap()) + ("class" to newClass))
+    val classes = classList.joinToString(separator = " ") + className
+    return copy(attributes = attributes + ("class" to classes))
 }

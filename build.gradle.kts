@@ -40,10 +40,8 @@ kotlin {
         apiVersion = kotlinTarget
         languageVersion = kotlinTarget
         freeCompilerArgs.addAll(
-            "-Xcontext-parameters",
             "-Xcontext-sensitive-resolution",
             "-Xskip-prerelease-check",
-            "-Xexplicit-backing-fields"
         )
         optIn.add("kotlinx.coroutines.ExperimentalCoroutinesApi")
         extraWarnings = true

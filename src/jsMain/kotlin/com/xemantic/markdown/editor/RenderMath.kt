@@ -49,7 +49,7 @@ fun Flow<SemanticEvent>.renderMath(): Flow<SemanticEvent> = flow {
         when {
             event is Mark && event.name == "math" -> {
                 inMath = true
-                displayMode = event.attributes?.get("display") == "block"
+                displayMode = event["display"] == "block"
                 latex.clear()
             }
             event is Unmark && event.name == "math" -> {
